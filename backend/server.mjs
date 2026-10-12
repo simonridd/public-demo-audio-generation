@@ -588,7 +588,7 @@ var PublicCallService = class {
             if (received > 12e3) throw new Error();
             if (bridge.snapshot().call?.playback?.status !== "playing") bridge.liveAudio(bound.callId, Buffer.from(raw));
           } catch {
-            ws.close(1008, "Live audio unavailable");
+            ws.send(JSON.stringify({ error: "Live audio unavailable" }), () => ws.close(1008, "Live audio unavailable"));
           }
         });
       });

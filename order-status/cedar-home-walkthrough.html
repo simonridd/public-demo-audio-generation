@@ -170,9 +170,15 @@
           const timeout = setTimeout(() => reject(new Error("Live audio did not connect.")), 8e3);
           socket.onopen = () => socket.send(JSON.stringify({ token: this.token }));
           socket.onmessage = (event) => {
-            if (JSON.parse(event.data).ready) {
+            const message = JSON.parse(event.data);
+            if (message.ready) {
               clearTimeout(timeout);
               resolve();
+            } else if (message.error) {
+              clearTimeout(timeout);
+              reject(new Error(message.error));
+              this.closeMic();
+              this.refresh();
             }
           };
           socket.onerror = () => {
