@@ -1,0 +1,17 @@
+{
+  "name": "ben-maya-call-backend",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": "22.x"
+  },
+  "scripts": {
+    "start": "node server.mjs"
+  },
+  "dependencies": {
+    "twilio": "6.1.2",
+    "ws": "8.22.0",
+    "zod": "4.6.5"
+  }
+}

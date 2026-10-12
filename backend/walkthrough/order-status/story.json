@@ -1,0 +1,83 @@
+{
+  "format": "voice-demo",
+  "version": 1,
+  "title": "Cedar Home — Where is my order?",
+  "description": "A fictional two-person order-status call. Maya Bennett is checking a delayed bedside lamp intended as a birthday gift. Ben Carter explains the courier status, delivery window and next steps. Target: about 90 seconds including short gaps. Both participants are prerecorded.",
+  "presenters": [
+    {
+      "id": "ELAINE",
+      "name": "Maya Bennett",
+      "description": "Customer · British woman in her early sixties. Thoughtful, courteous and capable; concerned about a birthday gift, then reassured.",
+      "live": false
+    },
+    {
+      "id": "BEN_CARTER",
+      "name": "Ben Carter",
+      "description": "Customer service advisor · British man. Warm, confident and reassuring, with a measured conversational pace and clear explanations.",
+      "live": false
+    }
+  ],
+  "scenes": [
+    {
+      "title": "Introductions and the missing order",
+      "cues": [
+        {
+          "speaker": "BEN_CARTER",
+          "text": "Hello, thank you for calling Cedar Home customer service. You're speaking with Ben. How can I help today?"
+        },
+        {
+          "speaker": "ELAINE",
+          "text": "Hi, I ordered a bedside lamp on Monday. <sigh> It was due yesterday, but it hasn't arrived. It's a birthday present for tomorrow.",
+          "deliveryDirection": "British, female, age 61, calm/capable, thoughtful without sounding frail; clear articulation and natural pauses; avoid overacting grief. Mild concern about a delayed birthday gift. Keep the sigh soft and brief, without anger or theatrical exasperation."
+        },
+        {
+          "speaker": "BEN_CARTER",
+          "text": "I'm sorry it's late. Could I have your name and order number, please?"
+        },
+        {
+          "speaker": "ELAINE",
+          "text": "Maya Bennett. <short pause> The order number is four eight one seven."
+        },
+        {
+          "speaker": "BEN_CARTER",
+          "text": "Thanks, Maya. I'll check the latest delivery update for you."
+        }
+      ]
+    },
+    {
+      "title": "The delivery update and a clear next step",
+      "cues": [
+        {
+          "speaker": "BEN_CARTER",
+          "text": "Your lamp was dispatched on Tuesday. <short pause> The courier had a delay, but it's out for delivery today."
+        },
+        {
+          "speaker": "ELAINE",
+          "text": "<exhales> That's good. Do you know when it'll arrive?",
+          "deliveryDirection": "British, female, age 61, calm/capable, thoughtful without sounding frail; clear articulation and natural pauses; avoid overacting grief. Gently relieved by the delivery update. Use a small, relaxed exhale and keep the following question conversational."
+        },
+        {
+          "speaker": "BEN_CARTER",
+          "text": "The delivery window is two to four this afternoon. Your confirmation email has a link to track it."
+        },
+        {
+          "speaker": "ELAINE",
+          "text": "I've found it. Will that show me if the time changes?"
+        },
+        {
+          "speaker": "BEN_CARTER",
+          "text": "Yes, it shows the latest update. If your lamp hasn't arrived by four, call us and we'll check with the courier."
+        },
+        {
+          "speaker": "ELAINE",
+          "text": "Perfect. <chuckle> I was worried it had gone missing. <short pause> Thanks for checking.",
+          "deliveryDirection": "British, female, age 61, calm/capable, thoughtful without sounding frail; clear articulation and natural pauses; avoid overacting grief. Warm and relieved. Use one quiet, brief, slightly self-conscious chuckle rather than broad laughter. Finish with sincere gratitude."
+        },
+        {
+          "speaker": "BEN_CARTER",
+          "text": "You're welcome, Maya. I hope you enjoy the lamp. Goodbye."
+        }
+      ]
+    }
+  ]
+}
