@@ -341,6 +341,9 @@ var TwilioService = class {
     session.socket = void 0;
   }
   accept(socket) {
+    console.info("Twilio media socket opened");
+    let firstFrame = true;
+    socket.on("close", (code) => console.info("Twilio media socket closed", code));
     let bound;
     const startup = setTimeout(() => socket.close(1008, "Start required"), 1e4);
     socket.on("error", () => {
@@ -351,6 +354,10 @@ var TwilioService = class {
       if (bound && bound.socket === socket) this.disconnected(bound);
     });
     socket.on("message", (raw) => {
+      if (firstFrame) {
+        firstFrame = false;
+        console.info("Twilio media first frame received");
+      }
       try {
         const message = JSON.parse(raw.toString());
         if (message.event === "start") {
@@ -545,6 +552,9 @@ var PublicCallService = class {
         return;
       }
       sockets.handleUpgrade(req, socket, head, (ws) => {
+        console.info("Presenter socket opened");
+        let firstFrame = true;
+        ws.on("close", (code) => console.info("Presenter socket closed", code));
         let bound, received = 0, period = Date.now();
         const timeout = setTimeout(() => ws.close(1008), 5e3);
         ws.on("error", () => {
@@ -554,6 +564,10 @@ var PublicCallService = class {
           if (bound?.socket === ws) bound.socket = void 0;
         });
         ws.on("message", (raw, binary) => {
+          if (firstFrame) {
+            firstFrame = false;
+            console.info("Presenter first frame received");
+          }
           try {
             if (!bound) {
               if (binary) throw new Error();
