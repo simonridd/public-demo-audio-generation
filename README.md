@@ -2,6 +2,31 @@
 
 The guided tours are hosted with GitHub Pages. The standalone Ben/Maya call backend runs separately on Render.
 
+## Repeat a walkthrough publication
+
+Build the reviewed private `demo-resources` source with `npm ci`, `npm run validate`,
+`npm test`, `npm run build`, `npm run walkthrough:export`, and `npm run walkthrough:test`.
+For this release, include the private DSS1-PUBLISH acceptance patch, which adds retained
+evidence to the outcome scene and fixes browser history and Escape handling. That patch
+and its regression checks are retained with the private publication evidence.
+Then, from this public checkout, run:
+
+```sh
+python3 scripts/merge-walkthrough-export.py /path/to/demo-resources/.cache/github-pages
+```
+
+The source export contains three tutorials: Cedar Home, single-turn audio and persona creation.
+The merge copies only those generated HTML files and `.nojekyll`, adds the existing Twilio
+card to the regenerated homepage and keeps its total at four. It fails if that retained
+card or tour is missing or the source catalog structure changes. Repeating it is idempotent.
+Do not replace the entire homepage with the three-card export or use a deleting directory sync.
+Keep the call tour, backend, `render.yaml` and `call-backend.json` in place.
+
+Review generated diffs, scan credentials, and test desktop/tablet/mobile opening, workflow
+and outcome scenes plus all four public routes before committing to `main`.
+A walkthrough publication does not authorize a backend deployment, configuration change,
+phone call or paid voice generation.
+
 ## Choose the phone-test backend
 
 Edit `call-backend.json` on GitHub:
