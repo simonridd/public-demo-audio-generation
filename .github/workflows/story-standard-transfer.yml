@@ -1,0 +1,16 @@
+name: DSS Public Deployment Preflight
+on:
+  push:
+    branches:
+      - deploy/demo-story-standard-v1
+permissions:
+  contents: write
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check branch write access without changes
+        run: |
+          git push --dry-run origin HEAD:refs/heads/deploy/demo-story-standard-v1
