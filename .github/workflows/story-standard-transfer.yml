@@ -1,16 +1,55 @@
-name: DSS Public Deployment Preflight
+name: Assemble DSS1 approved audio walkthrough
 on:
   push:
-    branches:
-      - deploy/demo-story-standard-v1
+    branches: [deploy/demo-story-standard-v1]
+    paths:
+      - .dss1-transfers/**
+      - .github/workflows/story-standard-transfer.yml
 permissions:
   contents: write
 jobs:
-  preflight:
+  assemble:
     runs-on: ubuntu-latest
-    timeout-minutes: 3
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
-      - name: Check branch write access without changes
+      - name: Assemble immutable approved Cedar HTML and validate export
+        shell: bash
         run: |
-          git push --dry-run origin HEAD:refs/heads/deploy/demo-story-standard-v1
+          python3 - <<'PY'
+          from pathlib import Path
+          import hashlib, re
+
+          parts = sorted(Path('.dss1-transfers/cedar-home').glob('part-*.txt'))
+          assert len(parts) == 8, f'Expected eight transfer chunks, got {len(parts)}'
+          data = b''.join(p.read_bytes() for p in parts)
+          git_sha = hashlib.sha1(f'blob {len(data)}\0'.encode() + data).hexdigest()
+          assert git_sha == 'd5114c6f00e20d94b11605449175426c2701aca8', f'Cedar artifact hash mismatch: {git_sha}'
+          target = Path('order-status/cedar-home-walkthrough.html')
+          target.write_bytes(data)
+
+          for filename, phrase in [
+              ('order-status/cedar-home-walkthrough.html', b'story-start'),
+              ('single-turn/single-turn-walkthrough.html', b'story-start'),
+              ('create-persona/create-persona-walkthrough.html', b'story-start'),
+              ('twilio-call/twilio-call-walkthrough.html', b'Twilio'),
+          ]:
+              assert phrase in Path(filename).read_bytes(), f'Missing expected tour content: {filename}'
+          homepage = Path('index.html').read_text()
+          assert homepage.count('<article class="demo-card') == 4, 'Expected three story tours plus retained live-call tour'
+          assert 'twilio-call/twilio-call-walkthrough.html' in homepage, 'Live-call tour card disappeared'
+          assert "document.querySelectorAll('a[data-route]')" not in homepage, 'Incorrect app-only clean-route rewriter'
+          assert '4 guided demos' in homepage
+          assert Path('backend/server.mjs').is_file() and Path('call-backend.json').is_file() and Path('.nojekyll').exists()
+          assert not Path('order-status/cedar-home-walkthrough.html').read_text().count('file://')
+          print('DSS1 export validated:', len(data), 'bytes, Git blob', git_sha, 'four catalogue cards, backend and live call intact')
+          PY
+      - name: Commit generated artifact and remove transfer chunks
+        shell: bash
+        run: |
+          git rm -r .dss1-transfers
+          git add order-status/cedar-home-walkthrough.html
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "build: assemble verified Cedar Home story walkthrough"
+          git push origin HEAD:refs/heads/deploy/demo-story-standard-v1
